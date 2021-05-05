@@ -1,32 +1,31 @@
 # IMDB Movies Search Service App
 
-##### Assignee: Arif Çavuş(arcavus - arcavus5428@hotmail.com)
-### Description
+##### Atanan: Arif Çavuş(arcavus - arcavus5428@hotmail.com)
+### Tanım
 
-This assessment is based on the popular website IMDb which offers movies and TV shows information. 
-They have kindly made their dataset publicly available at IMDb Datasets. 
-Your mission, should you choose to accept it, is to write a web application in Java that can fulfil the following requirements:
+Bu değerlendirme, filmler ve TV şovları bilgileri sunan popüler IMDb web sitesine dayanmaktadır.
+Veri kümelerini IMDb Veri Kümelerinde kamuya açık hale getirdiler.
+Misyonunuz, kabul etmeyi seçerseniz, aşağıdaki gereksinimleri karşılayabilecek Java'da bir web uygulaması yazmaktır:
 
-Requirement #1 (easy):
+Yapılacaklar #1 (kolay):
 
-Typecasting: Given a query by the user, where he/she provides an actor/actress name, the system should determine if that person has become typecasted (at least half of their work is one genre).
+Typecasting: Kullanıcı tarafından bir oyuncu / aktris adı sağladığı bir sorgu verildiğinde, sistem bu kişinin tiplendirilip yazılmadığını belirlemelidir (çalışmalarının en az yarısı bir türdür).
 
-Requirement #2 (easy):
+Yapılacaklar #2 (easy):
 
-Find the coincidence: Given a query by the user, where the input is two actors/actresses names, the application replies with a list of movies or TV shows that both people have shared.
+Tesadüfü bulun: Kullanıcı tarafından girişin iki oyuncu / oyuncu adı olduğu bir sorgu verildiğinde, uygulama, her iki kişi tarafından paylaşılan bir film veya TV şovu listesiyle yanıt verir.
 
 Requirement #3 (difficult):
 
-Six degrees of Kevin Bacon: Given a query by the user, you must provide what’s the degree of separation between the person (e.g. actor or actress) the user has entered and Kevin Bacon.
+Altı dereceli Kevin Bacon: Kullanıcının sorgusu üzerine, kullanıcının girdiği kişi (ör. Oyuncu veya oyuncu) ile Kevin Bacon arasındaki ayrımın derecesini sağlamalısınız.
+
+### İsteklerin Durumu
+* Requirement 1 [Yapıldı]
+* Requirement 2 [Yapıldı]
+* Requirement 3 [Yapıldı]
 
 
-### Exercise Status
-* Requirement 1 [DONE]
-* Requirement 2 [DONE]
-* Requirement 3 [DONE]
-
-
-### Required Dependencies (0/2) --- Imdb Csv Dataset
+### Gerekli Bağımlılıklar (0/2) --- Imdb Csv Dataset
 *Öncelikle imdb denin public olarak verdiği datasetlere bu linklerden ulaşabiliriz: [https://www.imdb.com/interfaces/](), [https://datasets.imdbws.com/]()
         
     * Bu dosyaları indirip resource altında data klasörüne koymamız gerekmektedir. DataLoader sınıfımızın doğru çalışması için.
@@ -38,9 +37,9 @@ Six degrees of Kevin Bacon: Given a query by the user, you must provide what’s
         * `title.principals.tsv.gz`
         * `title.ratings.tsv.gz`
 
-### Required Dependencies (1/2) --- How to prepare the MySQL Database (for Requirements 1-4)
+### Gerekli Bağımlılıklar (1/2) --- MySQL Veritabanı nasıl hazırlanır (for Requirements 1-2)
 
-* Have a running MySQL Server, so execute: `docker-compose up` in order to start MySQL
+* Çalışan bir MySQL Sunucunuz varsa, MySQL'i başlatmak için `docker-compose up` komutunu çalıştırın.
 
 * Imdb nin bize sunduğu csv dosyalarını database e atmak için iki seçeneğimiz var:
 
@@ -54,8 +53,7 @@ Six degrees of Kevin Bacon: Given a query by the user, you must provide what’s
        Burada tablolarımızın performans sorunu yaşamaması için index tanımlamaları yapılmıştır bu sql ler en altta tanımı  bulunmaktadır.
         
 ### Required Dependencies (2/2) --- How to prepare the Neo4j (for Requirement 3, shortestPath)
-
-* Run Neo4j via docker: 
+* 3 maddenin gerçekleştirilmesi için neo4j graph database i kullandık. Docker ile çalışması aşağıdaki işlemleri gerçekleştiririz. 
     ```docker
       docker run \
               --publish=7474:7474 --publish=7687:7687 \
@@ -65,26 +63,20 @@ Six degrees of Kevin Bacon: Given a query by the user, you must provide what’s
               --volume=$HOME/import:/var/lib/neo4j/import \
               neo4j:3.0
     ```
-* Common credentials: `neo4j/neo4j` || `neo4j/1234`
+* Genel yetkiler: `neo4j/neo4j` || `neo4j/1234`
         
-* Time to load the data from MySQL to Neo4j:
+* Verileri MySQL'den Neo4j'ye yükleme zamanı:
 
-    * One way is to cd into the $HOME/neo4j/data (see docker command) and replace the contents with those I have inside folder: Dump_for_Neo4j,
-      do the same for $HOME/neo4j/logs
+    * Bunun bir yolu, $ HOME / neo4j / data içine cd yapmak (docker komutuna bakın) ve içeriği klasörün içindekilerle değiştirmektir: Dump_for_Neo4j,
+     aynısını $ HOME / neo4j / logs için yapın
     
-    * The other way is to:
-        * Hit via HTTP, `POST` method on: `http://localhost:8181/acquaintance-links/prepare`,
-          which starts an `ETL job (from MySQL -> to Neo4j)`, it takes a lot of time in order to complete
-          so I advise you to wait for 5-8 completed steps (see logs) and then play with the degrees requirement.
-          Keep in mind that the integration test for Req.5 (Requirement5_ITSpec.groovy) might not pass due to different
-          loaded dataset.
-### How to run integration tests
+    * Bu işlem için yapabileceğimiz diğer yol ise:
+        * `http://localhost:8181/acquaintance-links/prepare` post methodunu çağırarak,
+          `ETL işini başlatmak (from MySQL -> to Neo4j)`,tamamlamak çok zaman alıyor
+          bu yüzden size 5-8 tamamlanmış adım beklemenizi (loglara bakın) ve ardından derece şartıyla oynamanızı tavsiye ederim.
 
-* Execute <code>mvn clean verify</code>
-
-
-### How to manual test
-Bu projede swagger ui entegrasyonu vardır. Oradan ilgili methodlarımız 
+### Manuel testleri nasıl yapıyoruz?
+Bu projede swagger ui entegrasyonu vardır. Oradan ilgili methodlarımızı manuel test edebiliriz. Bu framework un ayarlamalarını swaggerConfig gerçekleştirildi.
 * Load data (csv -> mysql) via http endpoint: 
     * localhost:8181/data/load
 * Requirement 1, use (GET):     
