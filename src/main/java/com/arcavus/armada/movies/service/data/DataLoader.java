@@ -9,14 +9,12 @@ import org.springframework.stereotype.Component;
 
 import javax.annotation.PreDestroy;
 import java.io.BufferedReader;
+import java.io.FileReader;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.*;
-import java.util.concurrent.Callable;
-import java.util.concurrent.Future;
-import java.util.concurrent.ThreadPoolExecutor;
-import java.util.concurrent.TimeUnit;
+import java.util.concurrent.*;
 import java.util.function.Function;
 import java.util.logging.Level;
 import java.util.stream.Collectors;
@@ -93,17 +91,14 @@ public class DataLoader {
     }
 
     private void initZippedFilesBindings() {
-        this.zippedFilesBindings = new HashMap<String, String>() {
-            {
-                put("data/name.basics.tsv.gz", outputFileDir + "/name.basics.tsv");
-                put("data/title.akas.tsv.gz", outputFileDir + "/title.akas.tsv");
-                put("data/title.basics.tsv.gz", outputFileDir + "/title.basics.tsv");
-                put("data/title.crew.tsv.gz", outputFileDir + "/title.crew.tsv");
-                put("data/title.episode.tsv.gz", outputFileDir + "/title.episode.tsv");
-                put("data/title.principals.tsv.gz", outputFileDir + "/title.principals.tsv");
-                put("data/title.ratings.tsv.gz", outputFileDir + "/title.ratings.tsv");
-            }
-        };
+        this.zippedFilesBindings = new HashMap<String, String>() ;
+        zippedFilesBindings.put("data/name.basics.tsv.gz", outputFileDir + "/name.basics.tsv");
+        zippedFilesBindings.put("data/title.akas.tsv.gz", outputFileDir + "/title.akas.tsv");
+        zippedFilesBindings.put("data/title.basics.tsv.gz", outputFileDir + "/title.basics.tsv");
+        zippedFilesBindings.put("data/title.crew.tsv.gz", outputFileDir + "/title.crew.tsv");
+        zippedFilesBindings.put("data/title.episode.tsv.gz", outputFileDir + "/title.episode.tsv");
+        zippedFilesBindings.put("data/title.principals.tsv.gz", outputFileDir + "/title.principals.tsv");
+        zippedFilesBindings.put("data/title.ratings.tsv.gz", outputFileDir + "/title.ratings.tsv");
     }
 
     private Boolean allUnzippedFilesExist() {
@@ -127,8 +122,9 @@ public class DataLoader {
                 .map(f -> {
                     try {
                         return f.get();
-                    } catch (Exception error) {
+                    } catch (InterruptedException | ExecutionException error) {
                         log.log(Level.SEVERE, error.getMessage());
+                        Thread.currentThread().interrupt();
                         throw new ProcessingException("DataLoader#unzipFiles, error: " + error.getMessage(), error);
                     }
                 })
@@ -164,12 +160,11 @@ public class DataLoader {
     private <T> void batchStore(String unzippedFileName, Function<List<String>, T> transformation) {
 
         final List<T> batchedEntities = new ArrayList<>(BATCH_SIZE);
-        try (BufferedReader bufferedReader = Files.newBufferedReader(Paths.get(unzippedFileName))) {
-
-            String line;
-            bufferedReader.readLine(); // skip header line
-
-            while ((line = bufferedReader.readLine()) != null) {
+        BufferedReader buffReader = null;
+        try {
+            buffReader = new BufferedReader(new FileReader(unzippedFileName));
+            String line = null;
+            while ((line = buffReader.readLine()) != null) {
 
                 final List<String> data = Arrays.asList(line.split("\t"));
 
