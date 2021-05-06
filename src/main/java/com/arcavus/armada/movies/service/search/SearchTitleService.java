@@ -119,6 +119,7 @@ public class SearchTitleService {
                         return listCompletableFuture.get(45, TimeUnit.SECONDS);
                     } catch (Exception e) {
                         log.log(Level.SEVERE, "could not map title, error: " + e.getMessage(), e);
+                        Thread.currentThread().interrupt();
                         throw new ProcessingException(e);
                     }
                 })
