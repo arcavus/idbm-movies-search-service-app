@@ -52,29 +52,6 @@ Altı dereceli Kevin Bacon: Kullanıcının sorgusu üzerine, kullanıcının gi
     *Bu işlem bilgisayarınızın hızına göre değişebiliyor. Data boyutu baya fazla yaklaşık 10 milyon kayıt atılıyor.
        Burada tablolarımızın performans sorunu yaşamaması için index tanımlamaları yapılmıştır bu sql ler en altta tanımı  bulunmaktadır.
         
-### Required Dependencies (2/2) --- How to prepare the Neo4j (for Requirement 3, shortestPath)
-* 3 maddenin gerçekleştirilmesi için neo4j graph database i kullandık. Docker ile çalışması aşağıdaki işlemleri gerçekleştiririz. 
-    ```docker
-      docker run \
-              --publish=7474:7474 --publish=7687:7687 \
-              --volume=$HOME/neo4j/data:/data \
-              --volume=$HOME/neo4j/logs:/logs \
-              --volume=$HOME/plugins:/plugins \
-              --volume=$HOME/import:/var/lib/neo4j/import \
-              neo4j:3.0
-    ```
-* Genel yetkiler: `neo4j/neo4j` || `neo4j/1234`
-        
-* Verileri MySQL'den Neo4j'ye yükleme zamanı:
-
-    * Bunun bir yolu, $ HOME / neo4j / data içine cd yapmak (docker komutuna bakın) ve içeriği klasörün içindekilerle değiştirmektir: Dump_for_Neo4j,
-     aynısını $ HOME / neo4j / logs için yapın
-    
-    * Bu işlem için yapabileceğimiz diğer yol ise:
-        * `http://localhost:8181/acquaintance-links/prepare` post methodunu çağırarak,
-          `ETL işini başlatmak (from MySQL -> to Neo4j)`,tamamlamak çok zaman alıyor
-          bu yüzden size 5-8 tamamlanmış adım beklemenizi (loglara bakın) ve ardından derece şartıyla oynamanızı tavsiye ederim.
-
 ### Manuel testleri nasıl yapıyoruz?
 Bu projede swagger ui entegrasyonu vardır. Oradan ilgili methodlarımızı manuel test edebiliriz. Bu framework un ayarlamalarını swaggerConfig gerçekleştirildi.
 localhost:8181/swagger-ui.html adresine girerek oradan çalıştırabileceğimiz linkleri görebiliriz.
@@ -150,13 +127,7 @@ localhost:8181/swagger-ui.html adresine girerek oradan çalıştırabileceğimiz
         ```
          To URL: `localhost:8181/search/names/coincidence`
 
-* Requirement 3, POST `localhost:8181/acquaintance-links` with body:
-    ```json
-          {
-            "sourceFullName":"Matt Damon",
-            "targetFullName":"Kevin Bacon"
-           } 
-    ```
+
 ### MySQL Indexes Created
 1) aka -> title_id
     ```sql
