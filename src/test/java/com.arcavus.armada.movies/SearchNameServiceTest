@@ -1,0 +1,55 @@
+package com.arcavus.armada.movies;
+
+import com.arcavus.armada.movies.domain.Name;
+import com.arcavus.armada.movies.repository.NamesRepository;
+import com.arcavus.armada.movies.service.mapper.TitleMapperService;
+import com.arcavus.armada.movies.service.search.SearchNameService;
+import com.arcavus.armada.movies.service.typecasted.TypecastedService;
+
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
+
+import java.util.ArrayList;
+import java.util.List;
+
+@ExtendWith(MockitoExtension.class)
+public class SearchNameServiceTest {
+
+    @Mock
+    private NamesRepository namesRepository;
+
+    @Mock
+    private TitleMapperService titleMapperService;
+
+    @Mock
+    private TypecastedService typecastedService;
+
+
+    @InjectMocks
+    private SearchNameService searchNameService;
+
+    @Test
+    void testByName_notEmptyPerson_returnNotEmptyList() {
+        String searchByNameValue = "personGenre1";
+
+        List<String> names = new ArrayList<>();
+        names.add("Will Smith");
+        names.add("Charles Bronson");
+
+        List<Name> nameList = new ArrayList<>();
+        Name name = new Name();
+        name.setPrimaryName("Will Smith");
+        name.setKnownForTitles("Actor");
+        name.setNconst("A195236");
+        nameList.add(name);
+
+        Person person = new Person("1","Will Smith","1985","2020",null,null);
+        when(namesRepository.findByPrimaryNameLike(searchByNameValue)).thenReturn(nameList);
+        when(titleMapperService.map(nameList.get(0))).thenReturn(person);
+        Optional<List<PersonGenreInfo>> actual = searchNameService.byName(searchByNameValue,false);
+        Assertions.assertEquals(person,actual.get().get(0).getPerson());
+    }
+}
