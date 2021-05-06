@@ -121,7 +121,7 @@ public class DataLoader {
                 .map(f -> {
                     try {
                         return f.get();
-                    } catch (InterruptedException | ExecutionException error) {
+                    } catch (Exception error) {
                         log.log(Level.SEVERE, error.getMessage());
                         Thread.currentThread().interrupt();
                         throw new ProcessingException("DataLoader#unzipFiles, error: " + error.getMessage(), error);
@@ -150,6 +150,7 @@ public class DataLoader {
                 f.get();
             } catch (Exception error) {
                 log.log(Level.SEVERE, error.getMessage());
+                Thread.currentThread().interrupt();
                 throw new ProcessingException("DataLoader#loadData, error: " + error.getMessage(), error);
             }
         });
