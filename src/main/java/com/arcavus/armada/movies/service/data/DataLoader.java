@@ -162,7 +162,7 @@ public class DataLoader {
         final List<T> batchedEntities = new ArrayList<>(BATCH_SIZE);
         try (BufferedReader bufferedReader = Files.newBufferedReader(Paths.get(unzippedFileName))) {
 
-            String line;
+            String line = null;
             bufferedReader.readLine(); // skip header line
 
             while ((line = bufferedReader.readLine()) != null) {
