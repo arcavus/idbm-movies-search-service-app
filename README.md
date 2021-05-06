@@ -22,7 +22,7 @@ Altı dereceli Kevin Bacon: Kullanıcının sorgusu üzerine, kullanıcının gi
 ### İsteklerin Durumu
 * Requirement 1 [Yapıldı]
 * Requirement 2 [Yapıldı]
-* Requirement 3 [Yapıldı]
+* Requirement 3 [Yapılmadı]
 
 
 ### Gerekli Bağımlılıklar (0/2) --- Imdb Csv Dataset
