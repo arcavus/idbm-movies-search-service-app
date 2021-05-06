@@ -9,7 +9,6 @@ import org.springframework.stereotype.Component;
 
 import javax.annotation.PreDestroy;
 import java.io.BufferedReader;
-import java.io.FileReader;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -160,11 +159,12 @@ public class DataLoader {
     private <T> void batchStore(String unzippedFileName, Function<List<String>, T> transformation) {
 
         final List<T> batchedEntities = new ArrayList<>(BATCH_SIZE);
-        BufferedReader buffReader = null;
-        try {
-            buffReader = new BufferedReader(new FileReader(unzippedFileName));
-            String line = null;
-            while ((line = buffReader.readLine()) != null) {
+        try (BufferedReader bufferedReader = Files.newBufferedReader(Paths.get(unzippedFileName))) {
+
+            String line;
+            bufferedReader.readLine(); // skip header line
+
+            while ((line = bufferedReader.readLine()) != null) {
 
                 final List<String> data = Arrays.asList(line.split("\t"));
 

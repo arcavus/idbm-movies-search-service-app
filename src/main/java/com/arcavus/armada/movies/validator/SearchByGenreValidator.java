@@ -20,7 +20,7 @@ public class SearchByGenreValidator {
 
     @PostConstruct
     @Transactional(readOnly = true, propagation = Propagation.REQUIRED)
-    void init() {
+    public void init() {
         genres = basicRepository.getGenres();
     }
 
