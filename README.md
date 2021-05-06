@@ -49,7 +49,7 @@ Altı dereceli Kevin Bacon: Kullanıcının sorgusu üzerine, kullanıcının gi
        önce unzip işlemi yapılarak belirttiğimiz dizine atılması ve satır satır okunarak işlenmesi sağlayabiliriz. 
        Load işleminin tamamlandığını log satırının en altında şöyle bir şey yazması gerekli:
        INFO 7086 --- [pool-1-thread-1] c.c.l.movies.service.data.DataLoader     : Total time to load data in ms: ~456223~)    
-    *Bu işlem bilgisayarınızın hızına göre değişebiliyor. Data boyutu baya fazla yaklaşık 10 000 000 milyon kayıt atılıyor.
+    *Bu işlem bilgisayarınızın hızına göre değişebiliyor. Data boyutu baya fazla yaklaşık 10 milyon kayıt atılıyor.
        Burada tablolarımızın performans sorunu yaşamaması için index tanımlamaları yapılmıştır bu sql ler en altta tanımı  bulunmaktadır.
         
 ### Required Dependencies (2/2) --- How to prepare the Neo4j (for Requirement 3, shortestPath)
@@ -77,6 +77,7 @@ Altı dereceli Kevin Bacon: Kullanıcının sorgusu üzerine, kullanıcının gi
 
 ### Manuel testleri nasıl yapıyoruz?
 Bu projede swagger ui entegrasyonu vardır. Oradan ilgili methodlarımızı manuel test edebiliriz. Bu framework un ayarlamalarını swaggerConfig gerçekleştirildi.
+localhost:8181/swagger-ui.html adresine girerek oradan çalıştırabileceğimiz linkleri görebiliriz.
 * Load data (csv -> mysql) via http endpoint: 
     * localhost:8181/data/load
 * Requirement 1, use (GET):     
