@@ -12,7 +12,7 @@ import java.util.logging.Level;
 @Configuration
 public class BasicConfig {
 
-    @Bean(destroyMethod = "shutdown", autowire = Autowire.BY_NAME)
+    @Bean(destroyMethod = "shutdown")
     public ThreadPoolExecutor workers() {
         int processors = Runtime.getRuntime().availableProcessors();
         ThreadFactory defaultFactory = Executors.defaultThreadFactory();

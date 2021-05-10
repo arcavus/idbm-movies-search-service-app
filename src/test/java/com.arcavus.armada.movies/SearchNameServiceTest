@@ -1,11 +1,14 @@
 package com.arcavus.armada.movies;
 
 import com.arcavus.armada.movies.domain.Name;
+import com.arcavus.armada.movies.dto.core.Person;
+import com.arcavus.armada.movies.dto.search.name.PersonGenreInfo;
 import com.arcavus.armada.movies.repository.NamesRepository;
 import com.arcavus.armada.movies.service.mapper.TitleMapperService;
 import com.arcavus.armada.movies.service.search.SearchNameService;
 import com.arcavus.armada.movies.service.typecasted.TypecastedService;
 
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -14,6 +17,9 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
+
+import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 public class SearchNameServiceTest {
