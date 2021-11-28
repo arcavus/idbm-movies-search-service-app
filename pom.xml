@@ -9,7 +9,7 @@
     <packaging>jar</packaging>
 
     <name>movies-search-service</name>
-    <description>Code assessment for Lunatech</description>
+    <description>Code challenge</description>
 
     <parent>
         <groupId>org.springframework.boot</groupId>
