@@ -1,34 +1,31 @@
 # IMDB Movies Search Service App
 
-##### Atanan: Arif Çavuş(arcavus - arcavus5428@hotmail.com)
-### Tanım
+This rating is based on the popular IMDb website that offers movies and TV shows information.
+They made their datasets publicly available on IMDb Datasets.
+Your mission is to write a web application in Java that, if you choose to accept it, can meet the following requirements:
 
-Bu değerlendirme, filmler ve TV şovları bilgileri sunan popüler IMDb web sitesine dayanmaktadır.
-Veri kümelerini IMDb Veri Kümelerinde kamuya açık hale getirdiler.
-Misyonunuz, kabul etmeyi seçerseniz, aşağıdaki gereksinimleri karşılayabilecek Java'da bir web uygulaması yazmaktır:
+To-Do #1 (easy):
 
-Yapılacaklar #1 (kolay):
+Typecasting: Given a query by the user where they provide an actor/actress name, the system must determine whether that person is typecast (at least half of their work is a genre).
 
-Typecasting: Kullanıcı tarafından bir oyuncu / aktris adı sağladığı bir sorgu verildiğinde, sistem bu kişinin tiplendirilip yazılmadığını belirlemelidir (çalışmalarının en az yarısı bir türdür).
+To-Do #2 (easy):
 
-Yapılacaklar #2 (easy):
-
-Tesadüfü bulun: Kullanıcı tarafından girişin iki oyuncu / oyuncu adı olduğu bir sorgu verildiğinde, uygulama, her iki kişi tarafından paylaşılan bir film veya TV şovu listesiyle yanıt verir.
+Find the coincidence: When given a query by the user where the input is two actor/actress names, the app responds with a list of movies or TV shows shared by both people.
 
 Requirement #3 (difficult):
 
-Altı dereceli Kevin Bacon: Kullanıcının sorgusu üzerine, kullanıcının girdiği kişi (ör. Oyuncu veya oyuncu) ile Kevin Bacon arasındaki ayrımın derecesini sağlamalısınız.
+Six grades of Kevin Bacon: Upon the user's query, you must provide the grade of distinction between the person the user is entering (eg Gamer or player) and Kevin Bacon.
 
-### İsteklerin Durumu
-* Requirement 1 [Yapıldı]
-* Requirement 2 [Yapıldı]
-* Requirement 3 [Yapılmadı]
+### Status of Requests
+* Requirement 1 [Done]
+* Requirement 2 [Done]
+* Requirement 3 [Not Done]
 
 
-### Gerekli Bağımlılıklar (0/2) --- Imdb Csv Dataset
-*Öncelikle imdb denin public olarak verdiği datasetlere bu linklerden ulaşabiliriz: [https://www.imdb.com/interfaces/](), [https://datasets.imdbws.com/]()
-        
-    * Bu dosyaları indirip resource altında data klasörüne koymamız gerekmektedir. DataLoader sınıfımızın doğru çalışması için.
+### Required Dependencies (0/2) --- Imdb Csv Dataset
+*First of all, we can access the datasets publicly provided by imdb from these links: [https://www.imdb.com/interfaces/](), [https://datasets.imdbws.com/]()
+
+    * We need to download these files and put them in the data folder under resource. For our DataLoader class to work correctly.
         * `name.basics.tsv.gz`
         * `title.akas.tsv.gz`
         * `title.basics.tsv.gz`
@@ -37,24 +34,24 @@ Altı dereceli Kevin Bacon: Kullanıcının sorgusu üzerine, kullanıcının gi
         * `title.principals.tsv.gz`
         * `title.ratings.tsv.gz`
 
-### Gerekli Bağımlılıklar (1/2) --- MySQL Veritabanı nasıl hazırlanır (for Requirements 1-2)
+### Required Dependencies (1/2) --- How to prepare MySQL Database (for Requirements 1-2)
 
-* Çalışan bir MySQL Sunucunuz varsa, MySQL'i başlatmak için `docker-compose up` komutunu çalıştırın.
+* If you have a running MySQL Server, run `docker-compose up` to start MySQL.
 
-* Imdb nin bize sunduğu csv dosyalarını database e atmak için iki seçeneğimiz var:
+* We have two options for importing the csv files that Imdb offers us to the database:
 
-    * Database imizi export edip onu size göndermem ve import edilmesi.
+    * Exporting our database and sending it to you and importing it.
 
-    * Diğer yol ise `http://localhost:8181/data/load` bu isteği swagger üzerinden çağırıp datalarımızın 
-       önce unzip işlemi yapılarak belirttiğimiz dizine atılması ve satır satır okunarak işlenmesi sağlayabiliriz. 
-       Load işleminin tamamlandığını log satırının en altında şöyle bir şey yazması gerekli:
-       INFO 7086 --- [pool-1-thread-1] c.c.l.movies.service.data.DataLoader     : Total time to load data in ms: ~456223~)    
-    *Bu işlem bilgisayarınızın hızına göre değişebiliyor. Data boyutu baya fazla yaklaşık 10 milyon kayıt atılıyor.
-       Burada tablolarımızın performans sorunu yaşamaması için index tanımlamaları yapılmıştır bu sql ler en altta tanımı  bulunmaktadır.
-        
-### Manuel testleri nasıl yapıyoruz?
-Bu projede swagger ui entegrasyonu vardır. Oradan ilgili methodlarımızı manuel test edebiliriz. Bu framework un ayarlamalarını swaggerConfig gerçekleştirildi.
-localhost:8181/swagger-ui.html adresine girerek oradan çalıştırabileceğimiz linkleri görebiliriz.
+    * The other way is `http://localhost:8181/data/load` by calling this request via swagger and getting our data
+      We can first unzip it to the directory we specify and process it by reading it line by line.
+      It should write something like this at the bottom of the log line that the load process is complete:
+      INFO 7086 --- [pool-1-thread-1] c.c.l.movies.service.data.DataLoader : Total time to load data in ms: ~456223~)
+      *This process may vary depending on the speed of your computer. The data size is too much, about 10 million records are thrown.
+      Here, index definitions are made so that our tables do not have performance problems. These sqls are defined at the bottom.
+
+### How do we run manual tests?
+This project has swagger ui integration. From there, we can manually test our related methods. The swaggerConfig configurations of this framework have been performed.
+By entering localhost:8181/swagger-ui.html we can see the links that we can run from there.
 * Load data (csv -> mysql) via http endpoint: 
     * localhost:8181/data/load
 * Requirement 1, use (GET):     
